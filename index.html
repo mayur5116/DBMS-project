@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexaBank — Private Banking</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       AUTH SECTION (Login + Register)
+  ═══════════════════════════════════════════ -->
+  <section id="section-auth" class="page active">
+    <div class="auth-split">
+      <div class="auth-brand">
+        <div class="brand-wordmark">
+          <span class="brand-n">N</span>exa<span class="brand-b">Bank</span>
+        </div>
+        <p class="brand-tagline">Private Banking. Elevated.</p>
+        <div class="brand-deco"></div>
+      </div>
+
+      <div class="auth-forms">
+        <!-- LOGIN FORM -->
+        <div id="form-login" class="auth-card active">
+          <h2 class="form-title">Welcome Back</h2>
+          <p class="form-sub">Sign in to your account</p>
+
+          <div id="login-error" class="alert alert-error hidden"></div>
+
+          <div class="field-group">
+            <label for="login-email">Email Address</label>
+            <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" />
+          </div>
+          <div class="field-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" />
+          </div>
+
+          <button class="btn btn-primary" onclick="loginUser()">
+            <span class="btn-text">Sign In</span>
+            <span class="btn-loader hidden"></span>
+          </button>
+
+          <p class="form-switch">
+            New to NexaBank?
+            <a href="#" onclick="showForm('register')">Create Account</a>
+          </p>
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div id="form-register" class="auth-card">
+          <h2 class="form-title">Open Account</h2>
+          <p class="form-sub">Join NexaBank in minutes</p>
+
+          <div id="register-error" class="alert alert-error hidden"></div>
+          <div id="register-success" class="alert alert-success hidden"></div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="reg-first">First Name</label>
+              <input type="text" id="reg-first" placeholder="Jane" />
+            </div>
+            <div class="field-group">
+              <label for="reg-last">Last Name</label>
+              <input type="text" id="reg-last" placeholder="Doe" />
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="reg-email">Email Address</label>
+            <input type="email" id="reg-email" placeholder="you@example.com" />
+          </div>
+          <div class="field-group">
+            <label for="reg-password">Password</label>
+            <input type="password" id="reg-password" placeholder="Min. 8 characters" />
+          </div>
+          <div class="field-group">
+            <label for="reg-confirm">Confirm Password</label>
+            <input type="password" id="reg-confirm" placeholder="••••••••" />
+          </div>
+
+          <button class="btn btn-primary" onclick="registerUser()">
+            <span class="btn-text">Create Account</span>
+            <span class="btn-loader hidden"></span>
+          </button>
+
+          <p class="form-switch">
+            Already have an account?
+            <a href="#" onclick="showForm('login')">Sign In</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       APP SHELL (Dashboard, Transfer, History)
+  ═══════════════════════════════════════════ -->
+  <section id="section-app" class="page">
+
+    <!-- SIDEBAR NAV -->
+    <nav class="sidebar">
+      <div class="sidebar-logo">
+        <span class="brand-n">N</span>exa<span class="brand-b">Bank</span>
+      </div>
+      <ul class="nav-list">
+        <li class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Overview</span>
+        </li>
+        <li class="nav-item" data-page="transfer" onclick="navigate('transfer')">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          <span>Transfer</span>
+        </li>
+        <li class="nav-item" data-page="history" onclick="navigate('history')">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span>History</span>
+        </li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="user-chip">
+          <div class="user-avatar" id="nav-avatar">JD</div>
+          <div class="user-meta">
+            <span id="nav-name">Jane Doe</span>
+            <span id="nav-acct">ACC-XXXXXX</span>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="logoutUser()" title="Sign Out">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- ── DASHBOARD PAGE ── -->
+      <div id="page-dashboard" class="app-page active">
+        <header class="page-header">
+          <div>
+            <p class="page-eyebrow">Good <span id="time-of-day">day</span></p>
+            <h1 class="page-title" id="dash-welcome">Jane Doe</h1>
+          </div>
+          <div class="header-date" id="current-date"></div>
+        </header>
+
+        <!-- BALANCE HERO CARD -->
+        <div class="balance-card">
+          <div class="balance-card-inner">
+            <div class="balance-label">Total Balance</div>
+            <div class="balance-amount" id="dash-balance">₹0.00</div>
+            <div class="balance-acct">
+              Account <span id="dash-acct-num">ACC-XXXXXX</span>
+            </div>
+          </div>
+          <div class="balance-deco-ring"></div>
+          <div class="balance-deco-ring ring2"></div>
+        </div>
+
+        <!-- QUICK STATS -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-icon income">↓</div>
+            <div>
+              <div class="stat-label">Total Credited</div>
+              <div class="stat-value" id="stat-credited">₹0.00</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon expense">↑</div>
+            <div>
+              <div class="stat-label">Total Debited</div>
+              <div class="stat-value" id="stat-debited">₹0.00</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon transfer">⇄</div>
+            <div>
+              <div class="stat-label">Transfers Made</div>
+              <div class="stat-value" id="stat-transfers">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECENT TRANSACTIONS (mini) -->
+        <div class="section-header">
+          <h2 class="section-title">Recent Activity</h2>
+          <a href="#" class="section-link" onclick="navigate('history')">View All →</a>
+        </div>
+        <div id="recent-txns" class="recent-list"></div>
+      </div>
+
+      <!-- ── TRANSFER PAGE ── -->
+      <div id="page-transfer" class="app-page">
+        <header class="page-header">
+          <div>
+            <p class="page-eyebrow">Send Money</p>
+            <h1 class="page-title">Transfer Funds</h1>
+          </div>
+        </header>
+
+        <div class="card-panel">
+          <div id="transfer-error" class="alert alert-error hidden"></div>
+          <div id="transfer-success" class="alert alert-success hidden"></div>
+
+          <div class="field-group">
+            <label for="tx-recipient">Recipient Account Number</label>
+            <input type="text" id="tx-recipient" placeholder="e.g. ACC-748291" />
+            <span class="field-hint">Enter the full account number of the recipient</span>
+          </div>
+          <div class="field-group">
+            <label for="tx-amount">Amount (₹)</label>
+            <div class="amount-input-wrap">
+              <span class="currency-symbol">₹</span>
+              <input type="number" id="tx-amount" placeholder="0.00" min="1" step="0.01" />
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="tx-note">Note (Optional)</label>
+            <input type="text" id="tx-note" placeholder="e.g. Rent, Dinner split…" maxlength="60" />
+          </div>
+
+          <div class="transfer-summary hidden" id="transfer-summary">
+            <div class="summary-row"><span>Recipient</span><strong id="sum-recipient">—</strong></div>
+            <div class="summary-row"><span>Amount</span><strong id="sum-amount">₹0.00</strong></div>
+            <div class="summary-row"><span>Note</span><strong id="sum-note">—</strong></div>
+            <div class="summary-row"><span>Remaining Balance</span><strong id="sum-remaining">₹0.00</strong></div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-outline" onclick="previewTransfer()">Preview</button>
+            <button class="btn btn-primary" id="btn-confirm-transfer" onclick="transferMoney()" disabled>
+              <span class="btn-text">Confirm Transfer</span>
+              <span class="btn-loader hidden"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── HISTORY PAGE ── -->
+      <div id="page-history" class="app-page">
+        <header class="page-header">
+          <div>
+            <p class="page-eyebrow">Your Ledger</p>
+            <h1 class="page-title">Transaction History</h1>
+          </div>
+          <div class="filter-row">
+            <select id="txn-filter" onchange="filterTransactions()">
+              <option value="all">All Types</option>
+              <option value="credit">Credits</option>
+              <option value="debit">Debits</option>
+              <option value="transfer">Transfers</option>
+            </select>
+          </div>
+        </header>
+
+        <div class="table-wrap">
+          <table class="txn-table">
+            <thead>
+              <tr>
+                <th>Date & Time</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Reference</th>
+                <th class="text-right">Amount</th>
+                <th class="text-right">Balance</th>
+              </tr>
+            </thead>
+            <tbody id="txn-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+          <div id="txn-empty" class="empty-state hidden">
+            <div class="empty-icon">⇄</div>
+            <p>No transactions found.</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
